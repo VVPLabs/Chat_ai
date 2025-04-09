@@ -9,6 +9,7 @@ from pydantic import BaseModel
 from psycopg.rows import dict_row
 from psycopg_pool import AsyncConnectionPool
 from langgraph.checkpoint.postgres.aio import AsyncPostgresSaver
+from fastapi.middleware.cors import CORSMiddleware
 
 
 from graph import compile_graph
@@ -16,6 +17,8 @@ from graph import compile_graph
 logging.basicConfig(level=logging.INFO)
 
 _ = load_dotenv(find_dotenv())
+
+
 
 connection_kwargs = {
     "autocommit": True,
@@ -31,6 +34,14 @@ database_connection_pool = AsyncConnectionPool(
 )
 
 app = FastAPI(lifespan=lambda app: lifespan(app))
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["http://localhost:5173"], 
+    allow_credentials=True,
+    allow_methods=["*"],  
+    allow_headers=["*"], 
+)
 
 graph = None
 
