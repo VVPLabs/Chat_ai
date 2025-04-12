@@ -1,5 +1,30 @@
+import os
+
+
+from dotenv import load_dotenv, find_dotenv
+from pydantic import SecretStr
 from tiktoken import encoding_for_model
-from langchain_core.messages import BaseMessage
+# from langchain.schema import Document
+# from langchain_google_genai.embeddings import GoogleGenerativeAIEmbeddings
+# from langchain_pinecone import PineconeVectorStore
+from langchain_core.messages import  BaseMessage
+
+
+
+
+_=load_dotenv(find_dotenv())
+
+GOOGLE_API_KEY=os.environ["GOOGLE_API_KEY"]
+
+# pc= Pinecone(pinecone_api_key=PINECONE_KEY)
+
+# embeddings= GoogleGenerativeAIEmbeddings(model="models/embedding-001", google_api_key=SecretStr(GOOGLE_API_KEY))
+# index_name="ai-chat"
+# index=pc.Index(index_name)
+
+# vector_store= PineconeVectorStore(index=index, embedding=embeddings, pinecone_api_key=PINECONE_KEY)
+
+
 
 def count_tokens(messages: list[BaseMessage]) -> int:
     encoding = encoding_for_model("gpt-3.5-turbo")
