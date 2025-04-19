@@ -36,7 +36,7 @@ export default function ChatBox() {
 
     window.addEventListener('resize', handleResize);
     handleResize(); // Initialize on first render
-    
+
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
@@ -53,19 +53,19 @@ export default function ChatBox() {
     if (!trimmed) return;
 
     const now = new Date();
-    const newUserMessage = { 
-      id: messages.length + 1, 
-      text: trimmed, 
-      sender: "user", 
-      timestamp: now 
+    const newUserMessage = {
+      id: messages.length + 1,
+      text: trimmed,
+      sender: "user",
+      timestamp: now
     };
-    
+
     setMessages(prev => [...prev, newUserMessage]);
     setInputValue('');
     setIsLoading(true);
 
     try {
-      const response = await fetch("http://localhost:8000/chat", {
+      const response = await fetch("http://localhost:8000/ai/chat", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -76,7 +76,8 @@ export default function ChatBox() {
 
       const data = await response.text();
       const sanitizedData = data.replace(/^"(.*)"$/, '$1');
-      
+
+
       setIsLoading(false);
       const botResponse = {
         id: messages.length + 2,
@@ -108,7 +109,7 @@ export default function ChatBox() {
   return (
     <div className="fixed bottom-6 right-6 z-50">
       {isOpen && (
-        <div 
+        <div
           ref={chatContainerRef}
           className="bg-white rounded-xl shadow-2xl w-80 sm:w-96 flex flex-col mb-4 border border-gray-200 overflow-hidden transition-all duration-300 ease-in-out"
           style={{ height: 'calc(var(--vh, 1vh) * 70)', maxHeight: '28rem' }}
@@ -118,8 +119,8 @@ export default function ChatBox() {
               <MessageSquare className="h-5 w-5 mr-2" />
               Chat Assistant
             </h3>
-            <button 
-              onClick={toggleChat} 
+            <button
+              onClick={toggleChat}
               className="text-white hover:bg-indigo-700 rounded-full p-1 transition duration-200"
               title="Close chat"
             >
@@ -131,12 +132,11 @@ export default function ChatBox() {
             {messages.map((message) => (
               <div key={message.id} className={`mb-4 flex ${message.sender === 'user' ? 'justify-end' : 'justify-start'}`}>
                 <div className="flex flex-col max-w-xs">
-                  <div 
-                    className={`rounded-2xl px-4 py-3 break-words shadow-sm ${
-                      message.sender === 'user'
-                        ? 'bg-blue-600 text-white rounded-br-none'
-                        : 'bg-white text-gray-800 rounded-bl-none border border-gray-200'
-                    }`}
+                  <div
+                    className={`rounded-2xl px-4 py-3 break-words shadow-sm ${message.sender === 'user'
+                      ? 'bg-blue-600 text-white rounded-br-none'
+                      : 'bg-white text-gray-800 rounded-bl-none border border-gray-200'
+                      }`}
                   >
                     {message.text}
                   </div>
@@ -147,7 +147,7 @@ export default function ChatBox() {
                 </div>
               </div>
             ))}
-            
+
             {isLoading && (
               <div className="flex justify-start mb-4">
                 <div className="bg-white text-gray-800 rounded-2xl rounded-bl-none px-4 py-3 max-w-xs shadow-sm border border-gray-200">
@@ -159,7 +159,7 @@ export default function ChatBox() {
                 </div>
               </div>
             )}
-            
+
             <div ref={messagesEndRef} className="h-1" />
           </div>
 
@@ -178,11 +178,10 @@ export default function ChatBox() {
               <button
                 onClick={handleSendMessage}
                 disabled={inputValue.trim() === '' || isLoading}
-                className={`ml-2 p-3 rounded-full transition-all duration-200 ${
-                  inputValue.trim() === '' || isLoading
-                    ? 'bg-gray-200 text-gray-400'
-                    : 'bg-blue-600 text-white hover:bg-blue-700'
-                }`}
+                className={`ml-2 p-3 rounded-full transition-all duration-200 ${inputValue.trim() === '' || isLoading
+                  ? 'bg-gray-200 text-gray-400'
+                  : 'bg-blue-600 text-white hover:bg-blue-700'
+                  }`}
                 title="Send message"
               >
                 <Send className="h-5 w-5" />
@@ -194,9 +193,8 @@ export default function ChatBox() {
 
       <button
         onClick={toggleChat}
-        className={`rounded-full p-4 shadow-lg ${
-          isOpen ? 'bg-indigo-700' : 'bg-blue-600 hover:bg-blue-700'
-        } text-white transition-all duration-300 hover:shadow-xl focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500`}
+        className={`rounded-full p-4 shadow-lg ${isOpen ? 'bg-indigo-700' : 'bg-blue-600 hover:bg-blue-700'
+          } text-white transition-all duration-300 hover:shadow-xl focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500`}
         aria-label="Toggle chat"
       >
         <MessageSquare className="h-6 w-6" />

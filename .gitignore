@@ -173,6 +173,10 @@ poetry.toml
 # LSP config files
 pyrightconfig.json
 
+
+token.json
+credentials.json
+
 ### react ###
 .DS_*
 logs

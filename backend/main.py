@@ -2,7 +2,7 @@ import os
 import logging
 import traceback
 
-from fastapi import FastAPI, HTTPException, Response
+from fastapi import APIRouter, FastAPI, HTTPException, Response
 from contextlib import asynccontextmanager
 from dotenv import load_dotenv, find_dotenv
 from pydantic import BaseModel
@@ -11,14 +11,13 @@ from psycopg_pool import AsyncConnectionPool
 from langgraph.checkpoint.postgres.aio import AsyncPostgresSaver
 from fastapi.middleware.cors import CORSMiddleware
 
-
-from graph import compile_graph
+from graph import compile_graph  # type: ignore
 
 logging.basicConfig(level=logging.INFO)
 
 _ = load_dotenv(find_dotenv())
 
-
+ai_router = APIRouter(prefix="/ai", tags=["AI"])
 connection_kwargs = {
     "autocommit": True,
     "prepare_threshold": 0,
@@ -59,12 +58,12 @@ class ChatInput(BaseModel):
     thread_id: str
 
 
-@app.get("/")
+@ai_router.get("/")
 async def welcome():
     return Response(content="Hello")
 
 
-@app.post("/chat")
+@ai_router.post("/chat")
 async def chat(input: ChatInput):
     global graph
     try:
@@ -83,3 +82,6 @@ async def chat(input: ChatInput):
         logging.error(f"Error processing chat: {str(e)}")
         logging.error(traceback.format_exc())
         raise HTTPException(status_code=500, detail="Internal Server Error")
+
+
+app.include_router(ai_router)
