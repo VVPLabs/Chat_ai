@@ -1,11 +1,11 @@
 import os
 from dotenv import load_dotenv, find_dotenv
 from langchain_core.tools import Tool
-from langchain_community.utilities import GoogleSerperAPIWrapper
 from langgraph.prebuilt import ToolNode
 from langchain_google_community import GmailToolkit
 from langchain_experimental.utilities import PythonREPL
 from langchain_community.utilities import OpenWeatherMapAPIWrapper
+from searchBuilder import web_search_tool_fn
 from langchain_google_community.gmail.utils import (
     get_gmail_credentials,
     build_resource_service,
@@ -14,8 +14,7 @@ from langchain_google_community.gmail.utils import (
 load_dotenv(find_dotenv())
 OPENWEATHERMAP_API_KEY = os.environ["OPENWEATHERMAP_API_KEY"]
 
-
-search = GoogleSerperAPIWrapper(gl="in", hl="en")
+weather = OpenWeatherMapAPIWrapper()
 
 toolkit = GmailToolkit()
 credentials = get_gmail_credentials(
@@ -28,17 +27,11 @@ gmail_tools = toolkit.get_tools()
 
 python_repl = PythonREPL()
 
-weather = OpenWeatherMapAPIWrapper()
 
 tools = []
 
 tools = [
     *gmail_tools,
-    Tool(
-        name="search",
-        func=search.run,
-        description="useful for when you need to ask with search",
-    ),
     Tool(
         name="python_repl",
         description="A Python shell. Use this to execute python commands. Input should be a valid python command. If you want to see the output of a value, you should print it out with `print(...)`.",
@@ -48,6 +41,15 @@ tools = [
         name="OpenWeatherMap",
         func=weather.run,
         description="Useful for getting current weather information for a given location. Input should be a city name.",
+    ),
+    Tool(
+        name="web_search",
+        func=web_search_tool_fn,
+        description=(
+            "Searches the web for up-to-date information using a search engine. "
+            "Useful for answering questions about current events, live sports, product availability, etc. "
+            "Input should be a plain-text search query."
+        ),
     ),
 ]
 
