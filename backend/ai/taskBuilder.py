@@ -10,17 +10,7 @@ from dotenv import load_dotenv, find_dotenv
 _ = load_dotenv(find_dotenv())
 
 
-class OptimizedWebSearchState(TypedDict):
-    input: str
-    task_goal: Optional[str]
-    subtasks: Optional[List[str]]
-    plan: Optional[str]
-    tools_used: Optional[List[str]]
-    feedback: Optional[str]
-
-
-from langchain_core.runnables import RunnableLambda
-from typing import TypedDict, List, Optional
+from typing import List, Optional
 
 
 class SubTask(TypedDict):
@@ -82,7 +72,7 @@ def BreakIntoSubtasksNode(state: TaskPlannerState) -> TaskPlannerState:
     {"goal": "...", "deadline": "...", "priority": "..."},
     ]"""
 
-    user_prompt = f"The main goal is: {goal}\n Break it into subtasks."
+    user_prompt = f"The main goal is: {goal}\nBreak it into subtasks."
 
     messages = [
         SystemMessage(content=system_message),

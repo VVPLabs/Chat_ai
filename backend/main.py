@@ -11,7 +11,7 @@ from psycopg_pool import AsyncConnectionPool
 from langgraph.checkpoint.postgres.aio import AsyncPostgresSaver
 from fastapi.middleware.cors import CORSMiddleware
 
-from graph import compile_graph  # type: ignore
+from ai.graph import compile_graph
 
 logging.basicConfig(level=logging.INFO)
 

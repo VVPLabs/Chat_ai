@@ -1,25 +1,28 @@
 import os
+
 from dotenv import load_dotenv, find_dotenv
 from langchain_core.tools import Tool
 from langgraph.prebuilt import ToolNode
 from langchain_google_community import GmailToolkit
 from langchain_experimental.utilities import PythonREPL
 from langchain_community.utilities import OpenWeatherMapAPIWrapper
-from searchBuilder import web_search_tool_fn
+from config import settings
+
+from .searchBuilder import web_search_tool_fn
 from langchain_google_community.gmail.utils import (
     get_gmail_credentials,
     build_resource_service,
 )
 
-load_dotenv(find_dotenv())
-OPENWEATHERMAP_API_KEY = os.environ["OPENWEATHERMAP_API_KEY"]
+_ = load_dotenv(find_dotenv())
+OPENWEATHERMAP_API_KEY = settings.OPENWEATHERMAP_API_KEY
+
 
 weather = OpenWeatherMapAPIWrapper()
 
-toolkit = GmailToolkit()
 credentials = get_gmail_credentials(
     scopes=["https://mail.google.com/"],
-    client_secrets_file="credentials.json",
+    client_secrets_file="credentials/credentials.json",
 )
 api_resource = build_resource_service(credentials=credentials)
 toolkit = GmailToolkit(api_resource=api_resource)

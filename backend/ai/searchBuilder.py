@@ -21,7 +21,7 @@ class OptimizedWebSearchState(TypedDict):
 
 
 def optimize_queries(state: OptimizedWebSearchState):
-    from llm import llm_with_tools
+    from .llm import llm_with_tools
 
     print("\n[OPTIMIZE QUERIES] Input state:", state)
 
@@ -83,7 +83,7 @@ def search_web(state: OptimizedWebSearchState):
 
 
 def generate_answer(state: OptimizedWebSearchState):
-    from llm import llm
+    from .llm import llm
 
     print("\n[GENERATE ANSWER] Generating answer from content...")
 

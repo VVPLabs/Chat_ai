@@ -18,7 +18,7 @@ from langchain_hyperbrowser import HyperbrowserLoader
 
 from langchain_core.runnables import chain
 from langchain_core.documents import Document
-
+from config import settings
 from pinecone import Pinecone, ServerlessSpec
 
 # from langchain_google_genai import GoogleGenerativeAIEmbeddings
@@ -26,9 +26,9 @@ from pinecone import Pinecone, ServerlessSpec
 
 _ = load_dotenv(find_dotenv())
 
-PINECONE_KEY = os.environ["PINECONE_KEY"]
-GOOGLE_API_KEY = os.environ["GOOGLE_API_KEY"]
-HYPERBROWSER_API_KEY = os.environ["HYPERBROWSER_API_KEY"]
+PINECONE_KEY = settings.PINECONE_KEY
+GOOGLE_API_KEY = settings.GOOGLE_API_KEY
+HYPERBROWSER_API_KEY = settings.HYPERBROWSER_API_KEY
 
 # embeddings = GoogleGenerativeAIEmbeddings(
 #     model="models/embedding-001", google_api_key=SecretStr(GOOGLE_API_KEY)
